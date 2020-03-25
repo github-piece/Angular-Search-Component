@@ -149,6 +149,4 @@ export class FilterComponent implements OnInit {
     this.availableAnswers[count] = this.answers[i];
     this.type[count + 1] = this.tableColumn[0].type;
   }
-  return() {
-  }
 }
