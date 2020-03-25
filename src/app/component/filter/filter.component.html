@@ -1,0 +1,79 @@
+<div class="filter-text mt-0">
+  Search Options
+</div>
+<mat-divider></mat-divider>
+<div class="detail">
+  <mat-icon>error_outline</mat-icon>
+  Please insert data what you are looking for.
+</div>
+<form [formGroup]="searchIndexForm" (ngSubmit)="getFilterData()">
+  <section>
+    <label>Method :</label>
+    <mat-radio-group class="mr-2" formControlName="groupOp">
+      <mat-radio-button value="And" checked color="primary">All</mat-radio-button>
+      <mat-radio-button value="Or" color="primary">Any</mat-radio-button>
+    </mat-radio-group>
+    <button mat-mini-fab type="button" color="primary" (click)="addControl()">
+      <mat-icon>add</mat-icon>
+    </button>
+    <mat-divider></mat-divider>
+    <div formArrayName="rules" *ngFor="let control of formData.controls; let i = index">
+      <ng-container [formGroupName]="i">
+        <mat-form-field>
+          <mat-label>Column</mat-label>
+          <mat-select [value]="tableColumn[0]['definition']" formControlName="field">
+            <mat-option *ngFor="let columnName of tableColumn; let index = index" [value]="columnName['definition']" (click)="setOption(index, i)">{{columnName.label}}</mat-option>
+          </mat-select>
+          <mat-error>
+            Column data <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Condition</mat-label>
+          <mat-select formControlName="op" [value]="availableAnswers[i].data[0]">
+            <mat-option *ngFor="let options of availableAnswers[i].values; let index = index" [value]="availableAnswers[i].data[index]">{{options}}</mat-option>
+          </mat-select>
+          <mat-error>
+            Select data <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field *ngIf="type[i] != 'date'">
+          <mat-label>Answer</mat-label>
+          <mat-select *ngIf="type[i] == 'select'" formControlName="data">
+            <mat-option *ngFor="let option of availableAnswers[i].values; let index = index" [value]="index">{{option}}</mat-option>
+          </mat-select>
+          <label *ngIf="type[i] != 'select'">
+            <input matInput [type]="type[i]" formControlName="data">
+          </label>
+          <mat-error>
+            Answer <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field *ngIf="type[i] == 'date'">
+          <mat-label>Answer</mat-label>
+          <label>
+            <input matInput [matDatepicker]="picker" formControlName="data">
+          </label>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error>
+            Answer <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <button mat-icon-button type="button" class="icon-btn" (click)="removeControl(i)">
+          <mat-icon>remove</mat-icon>
+        </button>
+      </ng-container>
+    </div>
+  </section>
+  <section>
+    <button mat-raised-button type="button" (click)="setDefault()">
+      <mat-icon>cached</mat-icon>
+      Default
+    </button>
+    <button mat-raised-button type="submit" color="primary" class="float-right">
+      <mat-icon>check</mat-icon>
+      Apply
+    </button>
+  </section>
+</form>
