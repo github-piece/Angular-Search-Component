@@ -62,9 +62,10 @@ export class AppComponent implements OnInit {
       data: {tableColumn: this.tableColumn, options: this.options, settings: this.settings}
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if (result !== undefined) {
         this.settings = result;
+      } else {
+        this.settings = {groupOp: 'And', rules: [{field: '', op: '', data: ''}]};
       }
     });
   }
